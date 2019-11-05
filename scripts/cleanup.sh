@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# set -e
 set -x
 
 # Cleanup network devices
@@ -9,12 +10,16 @@ sudo find /var/lib/dhclient -type f -exec rm -f '{}' +
 
 # Remove hostname
 echo "Clearing out /etc/hostname"
-sudo cat /dev/null > /etc/hostname
+sudo tee -a /etc/hostname <<'EOF'
+
+EOF
 
 # Tune Linux vm.dirty_background_bytes
 # Maximum amount of system memory that can be filled with dirty pages before everything must get committed to disk.
 echo "Setting vm.dirty_background_bytes"
-sudo echo "vm.dirty_background_bytes=100000000" >> /etc/sysctl.conf
+sudo tee -a /etc/sysctl.conf <<'EOF'
+vm.dirty_background_bytes=100000000
+EOF
 
 # Cleanup files
 echo "Cleaning up build files"
