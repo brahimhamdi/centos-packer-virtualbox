@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# set -e
 set -x
 
 # Cleanup network devices
@@ -13,6 +12,7 @@ echo "Clearing out /etc/hostname"
 sudo cat /dev/null > /etc/hostname
 
 # Tune Linux vm.dirty_background_bytes
+# Maximum amount of system memory that can be filled with dirty pages before everything must get committed to disk.
 echo "Setting vm.dirty_background_bytes"
 sudo echo "vm.dirty_background_bytes=100000000" >> /etc/sysctl.conf
 
@@ -24,5 +24,6 @@ sudo rm -rf /var/log/anaconda
 sudo yum --enablerepo=epel clean all
 
 # Zero out the rest of the free space using dd, then delete the written file.
+# Writes zeroes to all empty space on the volume.
 sudo dd if=/dev/zero of=/EMPTY bs=1M
 sudo rm -f /EMPTY
